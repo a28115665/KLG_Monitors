@@ -1,0 +1,209 @@
+<div class="dt-toolbar">
+	<form>
+		<div class="col-xs-12 col-sm-2 text-left">
+			<i class="fa fa-clock-o fa-lg txt-color-blue"></i>
+			<label class="font-md txt-color-blue">&nbsp;選擇搜尋時間</label>
+		</div>
+		<div class="col-xs-12 col-sm-2">
+			<div class="form-group">
+				<div class="input-group">
+					<input class="form-control" 
+						   id="from3" 
+						   type="text" 
+						   placeholder="從" 
+						   data-ng-model="QLtime.from">
+					<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-2">
+			<div class="form-group">
+				<div class="input-group">
+					<input class="form-control" 
+					 	   id="to3" 
+					 	   type="text" 
+					 	   placeholder="到"
+					 	   data-ng-model="QLtime.to">
+					<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-2"
+			 data-ng-if="QLtime.search == false">
+			<a class="btn btn-primary btn-block" 
+			   href="javascript:void(0);"
+			   data-ng-click="SearchFromDatePicker(QLtime.from, QLtime.to, '問題列表')">搜尋</a>
+		</div>
+		<div class="col-xs-12 col-sm-2"
+			 data-ng-if="QLtime.search == true">
+			<a class="btn btn-danger btn-block" 
+			   href="javascript:void(0);"
+			   data-ng-click="ClearSearchFromDatePicker(QLtime.from, QLtime.to, '問題列表')">取消搜尋</a>
+		</div>
+		<div class="col-xs-12 col-sm-2">
+			
+		</div>
+		<!-- <div class="col-xs-12 col-sm-2 text-right">
+			<button id="eg1"
+					type="button" 
+					class="btn btn-labeled btn-warning"
+					data-ng-click="BestFAQ(readyToFAQ, totalFAQ)">
+			 	<span class="btn-label">
+			  		<i class="fa fa-thumbs-o-up"></i>
+			 	</span>最佳解答確認
+			</button>
+		</div> -->
+	</form>
+</div>
+
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover" style="margin-bottom: 0px">
+		<thead>
+			<tr>	
+				<th data-class="expand">發佈者</th>
+				<th data-class="expand">類型</th>
+				<th data-hide="phone">主題</th>
+				<th>標題</th>
+				<th data-hide="phone,tablet">發佈日期</th>
+				<th class="text-center" style="width:5%">
+					刪除
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-ng-repeat="data in questionList">
+				<td>{{data.F_Author}}</td>
+				<td style="width: 53px;"><span class="label {{data.F_Class}}">{{data.F_TypeName}}</span></td>
+				<td>{{data.F_TypeSubName}}</td>
+				<td>
+					<a href="javascript:void(0);"
+					   data-ng-click="enter_ForumPost({BgClass:''}, data)">
+						{{data.F_Topic}}
+					</a>
+				</td>
+				<td>{{data.F_PublishDT}}</td>
+				<td class="text-center">
+					<a href="javascript:void(0);" 
+					class="btn btn-danger btn-xs txt-color-white"
+					data-ng-click="deleteData(data,'問題列表')">
+						<i class="fa fa-minus-square fa-lg"></i>
+					</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+</div>
+
+<div class="dt-toolbar-footer">
+	<div class="col-xs-12 col-sm-12 hidden-xs text-center"
+		 data-ng-if="numFoundQL == 0">
+		<strong>無資料</strong>
+	</div>
+	<div class="col-xs-12 col-sm-6 hidden-xs"
+		 data-ng-if="numFoundQL > 0">
+		 
+	</div>
+	<div class="col-xs-12 col-sm-6"
+		 data-ng-if="numFoundQL > 0">
+		<pagination style="margin: 5px 0 5px 0;"
+					total-items="numFoundQL" 
+					ng-model="currentPageQL" 
+					data-ng-click="SelectPage(currentPageQL, '問題列表')"
+					max-size="maxSize" 
+					class="pagination-sm" 
+					boundary-links="true"
+					rotate="false" 
+					num-pages="numPages"></pagination>
+	</div>
+</div>
+
+<script type="text/ng-template" id="問題列表.html">
+    <div class="modal-header">
+		<h3 class="modal-title text-danger">
+			刪除資料內容
+		</h3>
+    </div>
+    <div class="modal-body">
+    	<p>發佈者:<span class="text-success">&nbsp{{items.F_Author}}</span></p>
+    	<p>類型:<span class="text-success">&nbsp{{items.F_TypeName}}</span></p>
+		<p>主題:<span class="text-success">&nbsp{{items.F_TypeSubName}}</span></p>
+		<p>標題:<span class="text-success">&nbsp{{items.F_Topic}}</span></p>
+		<p>發佈日期:<span class="text-success">&nbsp{{items.F_PublishDT}}</span></p>
+		<p>內容:<post-content content="items.F_Content"></post-content></p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">確認刪除</button>
+        <button class="btn btn-warning" ng-click="cancel()">取消</button>
+    </div>
+</script>
+
+<script type="text/javascript">
+	/* DO NOT REMOVE : GLOBAL FUNCTIONS!
+	 *
+	 * pageSetUp(); WILL CALL THE FOLLOWING FUNCTIONS
+	 *
+	 * // activate tooltips
+	 * $("[rel=tooltip]").tooltip();
+	 *
+	 * // activate popovers
+	 * $("[rel=popover]").popover();
+	 *
+	 * // activate popovers with hover states
+	 * $("[rel=popover-hover]").popover({ trigger: "hover" });
+	 *
+	 * // activate inline charts
+	 * runAllCharts();
+	 *
+	 * // setup widgets
+	 * setup_widgets_desktop();
+	 *
+	 * // run form elements
+	 * runAllForms();
+	 *
+	 ********************************
+	 *
+	 * pageSetUp() is needed whenever you load a page.
+	 * It initializes and checks for all basic elements of the page
+	 * and makes rendering easier.
+	 *
+	 */
+
+	pageSetUp();
+
+	// PAGE RELATED SCRIPTS		
+
+	// pagefunction
+	
+	var pagefunction = function() {
+
+		$("#to3").datepicker({
+		    defaultDate: "+1w",
+		    changeMonth: true,
+		    numberOfMonths: 3,
+		    prevText: '<i class="fa fa-chevron-left"></i>',
+		    nextText: '<i class="fa fa-chevron-right"></i>',
+		    onClose: function (selectedDate) {
+		        $("#from3").datepicker("option", "maxDate", selectedDate);
+		    }
+
+		});
+		$("#from3").datepicker({
+		    defaultDate: "+1w",
+		    changeMonth: true,
+		    numberOfMonths: 3,
+		    prevText: '<i class="fa fa-chevron-left"></i>',
+		    nextText: '<i class="fa fa-chevron-right"></i>',
+		    onClose: function (selectedDate) {
+		        $("#to3").datepicker("option", "minDate", selectedDate);
+		    }
+		});
+	};
+	
+	// end pagefunction
+	
+	// load bootstrap-progress bar script and run pagefunction
+	// loadScript("js/plugin/bootstrap-progressbar/bootstrap-progressbar.min.js", pagefunction);
+	loadScript("js/plugin/jquery-form/jquery-form.min.js", pagefunction);
+
+</script>

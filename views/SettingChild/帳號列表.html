@@ -1,0 +1,250 @@
+<div class="dt-toolbar">
+	<form>
+		<div class="col-xs-12 col-sm-2 text-left">
+			<!-- <i class="fa fa-clock-o fa-lg txt-color-blue"></i>
+			<label class="font-md txt-color-blue">&nbsp;選擇搜尋時間</label> -->
+		</div>
+		<div class="col-xs-12 col-sm-2">
+			<!-- <div class="form-group">
+				<div class="input-group">
+					<input class="form-control" 
+						   id="from1" 
+						   name="from1" 
+						   type="text"
+						   placeholder="從"
+						   data-ng-model="ACtime.from">
+					<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+				</div>
+			</div> -->
+		</div>
+		<div class="col-xs-12 col-sm-2">
+			<!-- <div class="form-group">
+				<div class="input-group">
+					<input class="form-control" 
+						   id="to1"
+						   name="to1" 
+						   type="text" 
+						   placeholder="到"
+						   data-ng-model="ACtime.to">
+					<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+				</div>
+			</div> -->
+		</div>
+		<div class="col-xs-12 col-sm-2"
+			 data-ng-if="ACtime.search == false">
+			<!-- <a class="btn btn-primary btn-block" 
+			   href="javascript:void(0);"
+			   data-ng-click="SearchFromDatePicker(ACtime.from, ACtime.to, '帳號')">搜尋</a> -->
+		</div>
+		<div class="col-xs-12 col-sm-2"
+			 data-ng-if="ACtime.search == true">
+			<!-- <a class="btn btn-danger btn-block" 
+			   href="javascript:void(0);"
+			   data-ng-click="ClearSearchFromDatePicker(ACtime.from, ACtime.to, '帳號')">取消搜尋</a> -->
+		</div>
+		<div class="col-xs-12 col-sm-2">
+			
+		</div>
+		<div class="col-xs-12 col-sm-2 text-right">
+			<button type="button" 
+					class="btn btn-labeled btn-warning"
+					data-ng-click="AllowAcount(allUserAccount)">
+			 	<span class="btn-label">
+			  		<i class="fa fa-group"></i>
+			 	</span>帳號通過確認
+			</button>
+		</div>
+	</form>
+</div>
+
+<div class="table-responsive">
+	<table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox">
+		<thead>
+			<tr>
+				<th class="text-center">
+					<i class="fa fa-group"></i>
+				</th>
+				<th>部門單位</th>
+				<th>名稱</th>
+				<th>帳號</th>
+				<th>密碼</th>
+				<th>申請日期</th>
+				<th class="text-center" style="width:5%">
+					刪除
+				</th>
+				<!-- <th class="text-center" style="width:8%">
+					忘記密碼
+				</th> -->
+			</tr>
+		</thead>
+		<tbody>
+
+			<tr data-ng-repeat="data in allUserAccount.slice((ACcurrentPage - 1) * 10, (ACcurrentPage - 1) * 10 + 10)">
+				<td class="text-center">
+					<span class="onoffswitch">
+						<input data-ng-if="data.U_Check == true"
+							   type="checkbox" 
+							   name="start_interval" 
+							   class="onoffswitch-checkbox"
+							   id="acount{{$index}}"
+							   data-ng-click="ChangeCheck($index)"
+							   checked>
+						<input data-ng-if="data.U_Check == false"
+							   type="checkbox" 
+							   name="start_interval" 
+							   class="onoffswitch-checkbox"
+							   data-ng-click="ChangeCheck($index)" 
+							   id="acount{{$index}}">
+						<label class="onoffswitch-label" 
+							   for="acount{{$index}}"> 
+							<span class="onoffswitch-inner" data-swchon-text="YES" data-swchoff-text="NO">
+
+							</span> 
+							<span class="onoffswitch-switch"></span> 
+						</label> 
+					</span>
+				</td>
+				<td>{{data.U_Department}}</td>
+				<td>{{data.U_Name}}</td>
+				<td>{{data.U_ID}}</td>
+				<td><span id="password">{{data.U_PW}}</span></td>
+				<td>{{data.U_CR_TIME}}</td>
+				<td class="text-center">
+					<a href="javascript:void(0);" 
+					class="btn btn-danger btn-xs txt-color-white"
+					data-ng-click="deleteData(data,'帳號')">
+						<i class="fa fa-minus-square fa-lg"></i>
+					</a>
+				</td>
+				<!-- <td class="text-center">
+					<a href="mailto:{{data.U_Mail}}" 
+					class="btn btn-warning btn-xs txt-color-white"
+					data-ng-click="sendEmail(data)">
+						<i class="fa fa-envelope-square fa-lg"></i>
+					</a>
+				</td> -->
+			</tr>
+
+		</tbody>
+	</table>
+	
+</div>
+
+<div class="dt-toolbar-footer">
+	<div class="col-xs-12 col-sm-12 hidden-xs text-center"
+		 data-ng-if="numFoundAC == 0">
+		<strong>無資料</strong>
+	</div>
+	<div class="col-xs-12 col-sm-6 hidden-xs"
+		 data-ng-if="numFoundAC > 0">
+		 
+	</div>
+	<div class="col-xs-12 col-sm-6"
+		 data-ng-if="numFoundAC > 0">
+		<pagination style="margin: 5px 0 5px 0;"
+					total-items="numFoundAC" 
+					ng-model="ACcurrentPage" 
+					data-ng-click="SelectPage(ACcurrentPage, '帳號')"
+					max-size="maxSize" 
+					class="pagination-sm" 
+					boundary-links="true"
+					rotate="false" 
+					num-pages="numPages"></pagination>
+	</div>
+</div>
+
+<style>
+#password {
+    -webkit-text-security: disc;
+    -webkit-appearance: textfield;
+    -webkit-user-select: text;
+    cursor: auto;
+}
+</style>
+
+<script type="text/ng-template" id="帳號.html">
+    <div class="modal-header">
+		<h3 class="modal-title text-danger">
+			刪除資料內容
+		</h3>
+    </div>
+    <div class="modal-body">
+    	<p>部門單位:<span class="text-success">&nbsp{{items.U_Organization}}</span></p>
+		<p>名稱:<span class="text-success">&nbsp{{items.U_Name}}</span></p>
+		<p>密碼:<span class="text-success" id="password">&nbsp{{items.U_Password}}</span></p>
+		<p>信箱:<span class="text-success">&nbsp{{items.U_Mail}}</span></p>
+		<p>申請日期:<span class="text-success">&nbsp{{items.U_PublishDT}}</span></p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">確認刪除</button>
+        <button class="btn btn-warning" ng-click="cancel()">取消</button>
+    </div>
+</script>
+
+<script type="text/javascript">
+	/* DO NOT REMOVE : GLOBAL FUNCTIONS!
+	 *
+	 * pageSetUp(); WILL CALL THE FOLLOWING FUNCTIONS
+	 *
+	 * // activate tooltips
+	 * $("[rel=tooltip]").tooltip();
+	 *
+	 * // activate popovers
+	 * $("[rel=popover]").popover();
+	 *
+	 * // activate popovers with hover states
+	 * $("[rel=popover-hover]").popover({ trigger: "hover" });
+	 *
+	 * // activate inline charts
+	 * runAllCharts();
+	 *
+	 * // setup widgets
+	 * setup_widgets_desktop();
+	 *
+	 * // run form elements
+	 * runAllForms();
+	 *
+	 ********************************
+	 *
+	 * pageSetUp() is needed whenever you load a page.
+	 * It initializes and checks for all basic elements of the page
+	 * and makes rendering easier.
+	 *
+	 */
+
+	// PAGE RELATED SCRIPTS		
+
+	pagefunction
+	
+	var pagefunction = function() {
+		// Date Range Picker
+		$("#to1").datepicker({
+		    defaultDate: "+1w",
+		    changeMonth: true,
+		    numberOfMonths: 3,
+		    prevText: '<i class="fa fa-chevron-left"></i>',
+		    nextText: '<i class="fa fa-chevron-right"></i>',
+		    onClose: function (selectedDate) {
+		        $("#from1").datepicker("option", "maxDate", selectedDate);
+		    }
+
+		});
+		$("#from1").datepicker({
+		    defaultDate: "+1w",
+		    changeMonth: true,
+		    numberOfMonths: 3,
+		    prevText: '<i class="fa fa-chevron-left"></i>',
+		    nextText: '<i class="fa fa-chevron-right"></i>',
+		    onClose: function (selectedDate) {
+		        $("#to1").datepicker("option", "minDate", selectedDate);
+		    }
+		});
+	};
+	
+	// end pagefunction
+	
+	// load bootstrap-progress bar script and run pagefunction
+	// loadScript("js/plugin/bootstrap-progressbar/bootstrap-progressbar.min.js", pagefunction);
+	loadScript("js/plugin/jquery-form/jquery-form.min.js", pagefunction);
+
+</script>

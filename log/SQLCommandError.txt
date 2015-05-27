@@ -1,0 +1,5 @@
+[ERROR] 2015-05-07 09:17:21,698 [org.apache.jsp.KLG_005fMonitors.jsp.DBUpdate_jsp._jspService(DBUpdate_jsp.java:413)] Update失敗["Administrator"]，接近關鍵字 'WHERE' 之處的語法不正確。
+[ERROR] 2015-05-07 09:45:18,381 [org.apache.jsp.KLG_005fMonitors.jsp.DBUpdate_jsp._jspService(DBUpdate_jsp.java:413)] Update失敗["Administrator"]，接近關鍵字 'WHERE' 之處的語法不正確。
+[ERROR] 2015-05-07 11:35:15,403 [org.apache.jsp.KLG_005fMonitors.jsp.DBUpdate_jsp._jspService(DBUpdate_jsp.java:413)] Update失敗["Administrator"]，將 nvarchar 值 'null' 轉換成資料類型 int 時，轉換失敗。
+[ERROR] 2015-05-07 11:35:22,000 [org.apache.jsp.KLG_005fMonitors.jsp.DBUpdate_jsp._jspService(DBUpdate_jsp.java:413)] Update失敗["Administrator"]，將 nvarchar 值 'null' 轉換成資料類型 int 時，轉換失敗。
+[ERROR] 2015-05-07 11:36:09,073 [org.apache.jsp.KLG_005fMonitors.jsp.DBUpdate_jsp._jspService(DBUpdate_jsp.java:413)] Update失敗["Administrator"]，將 nvarchar 值 'null' 轉換成資料類型 int 時，轉換失敗。

@@ -1,0 +1,36 @@
+<!-- User info -->
+<div class="login-info" data-ng-controller="HeaderCtrl">
+	<span> <!-- User image size is adjusted inside CSS, it should stay as is --> 
+		<a href="#/Setting" id="show-shortcut" data-ng-hide="UserInfo.U_Role == ''">
+			<img src="img/avatars/adm.png" alt="me" class="online" data-ng-if="UserInfo.U_Role == 'Admin'"/>
+			<img src="img/avatars/male.png" alt="me" class="online" data-ng-if="UserInfo.U_Role == 'User'"/> 
+			<span data-localize="{{UserInfo.U_Name}}">
+				{{UserInfo.U_Name}}
+			</span>
+		</a> 
+		<a href="#" id="show-shortcut" data-ng-show="UserInfo == null">
+			<img src="img/avatars/male.png" alt="me" class="online" /> 
+			<span data-localize="訪客">
+				訪客
+			</span>
+		</a>
+		
+	</span>
+</div>
+<!-- end user info -->
+
+<!-- NAVIGATION : This navigation is also responsive
+
+To make this navigation dynamic please make sure to link the node
+(the reference to the nav > ul) after page load. Or the navigation
+will not initialize.
+-->
+
+<navigation>
+	<nav:item data-view="/MasterPage" data-icon="fa fa-lg fa-fw fa-home" title="監視器資訊" data-ng-if="UserInfo == null"/>
+	<nav:item data-view="/MasterPage" data-icon="fa fa-lg fa-fw fa-home" title="監視器資訊" data-ng-if="UserInfo.U_Role == 'Admin' || UserInfo.U_Role == 'User'"/>
+	<nav:item data-view="/Setting" data-icon="fa fa-lg fa-fw fa-gear" title="帳號管理" data-ng-if="UserInfo.U_Role == 'Admin' || UserInfo.U_Role == 'User'"/>
+</navigation>
+<span class="minifyme" data-action="minifyMenu"> 
+	<i class="fa fa-arrow-circle-left hit"></i> 
+</span>

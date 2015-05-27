@@ -1,0 +1,214 @@
+<div class="dt-toolbar">
+	<form>
+		<div class="col-xs-12 col-sm-2 text-left">
+			<i class="fa fa-clock-o fa-lg txt-color-blue"></i>
+			<label class="font-md txt-color-blue">&nbsp;選擇搜尋時間</label>
+		</div>
+		<div class="col-xs-12 col-sm-2">
+			<div class="form-group">
+				<div class="input-group">
+					<input class="form-control" 
+						   id="from4" 
+						   type="text" 
+						   placeholder="從" 
+						   data-ng-model="FAQtime.from">
+					<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-2">
+			<div class="form-group">
+				<div class="input-group">
+					<input class="form-control" 
+					 	   id="to4" 
+					 	   type="text" 
+					 	   placeholder="到"
+					 	   data-ng-model="FAQtime.to">
+					<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-2"
+			 data-ng-if="FAQtime.search == false">
+			<a class="btn btn-primary btn-block" 
+			   href="javascript:void(0);"
+			   data-ng-click="SearchFromDatePicker(FAQtime.from, FAQtime.to, 'FAQ列表')">搜尋</a>
+		</div>
+		<div class="col-xs-12 col-sm-2"
+			 data-ng-if="FAQtime.search == true">
+			<a class="btn btn-danger btn-block" 
+			   href="javascript:void(0);"
+			   data-ng-click="ClearSearchFromDatePicker(FAQtime.from, FAQtime.to, 'FAQ列表')">取消搜尋</a>
+		</div>
+		<div class="col-xs-12 col-sm-2">
+			
+		</div>
+		<div class="col-xs-12 col-sm-2 text-right">
+			<button id="eg1"
+					type="button" 
+					class="btn btn-labeled btn-warning"
+					data-ng-click="BestFAQ(readyToFAQ, totalFAQ)">
+			 	<span class="btn-label">
+			  		<i class="fa fa-thumbs-o-up"></i>
+			 	</span>最佳解答確認
+			</button>
+		</div>
+	</form>
+</div>
+
+<div class="table-responsive">
+	<table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox">
+		<thead>
+			<tr>	
+				<th class="text-center">
+					<!-- <label class="checkbox">
+						<input type="checkbox" name="checkbox-inline">
+						<i></i>
+					</label> -->
+					<i class="fa fa-thumbs-o-up"></i>
+				</th>
+				<th data-class="expand"> 發佈者</th>
+				<th data-hide="phone"> 主題</th>
+				<th>標題</th>
+				<th data-hide="phone,tablet">時間</th>
+				<th data-hide="phone,tablet" style="width:200px">分數</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-ng-repeat="data in readyToFAQ">
+				<td>
+					<span class="onoffswitch">
+						<input data-ng-if="data.F_FAQ"
+							   type="checkbox" 
+							   name="start_interval" 
+							   class="onoffswitch-checkbox"
+							   data-ng-click="ChoseBest($index)" 
+							   id="stt{{$index}}"
+							   checked>
+						<input data-ng-if="!data.F_FAQ"
+							   type="checkbox" 
+							   name="start_interval" 
+							   class="onoffswitch-checkbox" 
+							   data-ng-click="ChoseBest($index)"
+							   id="stt{{$index}}">
+						<label class="onoffswitch-label" 
+							   for="stt{{$index}}"> 
+							<span class="onoffswitch-inner" data-swchon-text="YES" data-swchoff-text="NO">
+
+							</span> 
+							<span class="onoffswitch-switch"></span> 
+						</label> 
+					</span>
+				</td>
+				<td>{{data.F_UserName}}</td>
+				<td>{{data.F_TypeSubName}}</td>
+				<td><a href="javascript:void(0)"
+					   data-ng-click="enter_ForumPost({BgClass:''}, data)">{{data.F_Topic}}</a></td>
+				<td>{{data.F_PublishDT}}</td>
+				<td>
+					<div class="rating" data-ng-init="star = countStar(data.F_Score);unstar = countStar(10-data.F_Score)">
+                        <span data-ng-repeat="data in star">
+                            <i class="fa fa-star text-warning"></i>
+                        </span>
+                        <span data-ng-repeat="data in unstar">
+                            <i class="fa fa-star text-muted"></i>
+                        </span>
+                    </div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+</div>
+
+<div class="dt-toolbar-footer">
+	<div class="col-xs-12 col-sm-12 hidden-xs text-center"
+		 data-ng-if="numFoundRTB == 0">
+		<strong>無資料</strong>
+	</div>
+	<div class="col-xs-12 col-sm-6 hidden-xs"
+		 data-ng-if="numFoundRTB > 0">
+	</div>
+	<div class="col-xs-12 col-sm-6"
+		 data-ng-if="numFoundRTB > 0">
+		<pagination style="margin: 5px 0 5px 0;"
+					total-items="numFoundRTB" 
+					ng-model="currentPage" 
+					data-ng-click="SelectPage(currentPage, 'FAQ列表')"
+					max-size="maxSize" 
+					class="pagination-sm" 
+					boundary-links="true"
+					rotate="false" 
+					num-pages="numPages"></pagination>
+	</div>
+</div>
+
+<script type="text/javascript">
+	/* DO NOT REMOVE : GLOBAL FUNCTIONS!
+	 *
+	 * pageSetUp(); WILL CALL THE FOLLOWING FUNCTIONS
+	 *
+	 * // activate tooltips
+	 * $("[rel=tooltip]").tooltip();
+	 *
+	 * // activate popovers
+	 * $("[rel=popover]").popover();
+	 *
+	 * // activate popovers with hover states
+	 * $("[rel=popover-hover]").popover({ trigger: "hover" });
+	 *
+	 * // activate inline charts
+	 * runAllCharts();
+	 *
+	 * // setup widgets
+	 * setup_widgets_desktop();
+	 *
+	 * // run form elements
+	 * runAllForms();
+	 *
+	 ********************************
+	 *
+	 * pageSetUp() is needed whenever you load a page.
+	 * It initializes and checks for all basic elements of the page
+	 * and makes rendering easier.
+	 *
+	 */
+
+	pageSetUp();
+
+	// PAGE RELATED SCRIPTS		
+
+	// pagefunction
+	
+	var pagefunction = function() {
+		
+		$("#to4").datepicker({
+		    defaultDate: "+1w",
+		    changeMonth: true,
+		    numberOfMonths: 3,
+		    prevText: '<i class="fa fa-chevron-left"></i>',
+		    nextText: '<i class="fa fa-chevron-right"></i>',
+		    onClose: function (selectedDate) {
+		        $("#from4").datepicker("option", "maxDate", selectedDate);
+		    }
+
+		});
+		$("#from4").datepicker({
+		    defaultDate: "+1w",
+		    changeMonth: true,
+		    numberOfMonths: 3,
+		    prevText: '<i class="fa fa-chevron-left"></i>',
+		    nextText: '<i class="fa fa-chevron-right"></i>',
+		    onClose: function (selectedDate) {
+		        $("#to4").datepicker("option", "minDate", selectedDate);
+		    }
+		});
+	};
+	
+	// end pagefunction
+	
+	// load bootstrap-progress bar script and run pagefunction
+	// loadScript("js/plugin/bootstrap-progressbar/bootstrap-progressbar.min.js", pagefunction);
+	loadScript("js/plugin/jquery-form/jquery-form.min.js", pagefunction);
+
+</script>

@@ -1,0 +1,441 @@
+<div class="row" data-ng-controller="MasterPageCtrl">
+
+	<div class="col-sm-12" data-ng-controller="LoginPageCtrl" data-ng-init="login(credentials)">
+
+		<!-- start row -->
+
+		<div class="row">
+
+			<div class="col-xs-12 col-sm-7 col-md-7 col-lg-6">
+				<h1 class="page-title txt-color-blueDark">
+					<i class="fa fa-home fa-fw "></i> 
+						分佈區
+				</h1>
+
+			</div>
+
+			<div class="col-xs-12 col-sm-3 col-md-3 col-lg-6">
+				<ul id="sparks">
+					<li class="sparks-info">
+						<h5> 路口監視器
+							<span class="txt-color-blue">{{countMonitors.Monitor00}}</span>
+						</h5>
+						<img src="img/monitors/m_type_00-128.png" style="width: 40px">
+					</li>
+					<li class="sparks-info">
+						<h5> 路口監視器
+							<span class="txt-color-blue">{{countMonitors.Monitor01}}</span>
+						</h5>
+						<img src="img/monitors/m_type_01-128.png" style="width: 40px">
+					</li>
+					<li class="sparks-info">
+						<h5> 民間監視器
+							<span class="txt-color-blue">{{countMonitors.Monitor10}}</span>
+						</h5>
+						<img src="img/monitors/m_type_10-128.png" style="width: 40px">
+					</li>
+					<li class="sparks-info">
+						<h5> 民間監視器
+							<span class="txt-color-blue">{{countMonitors.Monitor11}}</span>
+						</h5>
+						<img src="img/monitors/m_type_11-128.png" style="width: 40px">
+					</li>
+				</ul>
+			</div>
+
+			<!-- <article class="col-sm-6">
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav navbar-right"
+						 data-ng-if="UserInfo != null">
+						<li class="active bg-color-info" style="border-style:dashed;">
+							<a href="javascript:void(0);"
+							   data-ng-click="postNewsOnBoard()">發佈新訊息</a>
+						</li>
+					</ul>
+					<form class="navbar-form navbar-right smart-form ng-pristine ng-valid" role="search">
+						<div class="form-group">
+							<label class="input" style="margin-top:7px"> 
+								<i class="icon-append fa fa-search"></i>
+								<input type="text" 
+									   name="search" 
+									   placeholder="Search"
+									   data-ng-model="searchKeywords"
+								   	   data-ng-keyup='searchData(board,"Board")'>
+								<b class="tooltip tooltip-bottom-right">Search the Board</b> 
+							</label>
+						</div>
+					</form>
+					<ul class="nav navbar-nav navbar-right">
+						<li style="padding-top:5px;">
+							<h1 class="font-md"><small class="text-danger"> &nbsp;&nbsp;({{filteredBoardStores.length}} 項結果)&nbsp;&nbsp;</small></h1>
+						</li>
+					</ul>
+				</div>
+
+			</article> -->
+
+		</div>
+		<!-- end row -->
+
+		<div class="col-sm-12">
+	        <ui-gmap-google-map
+	                center="map.center"
+	                zoom="map.zoom"
+	                dragging="map.dragging"
+	                bounds="map.bounds"
+	                events="map.events"
+	                pan="true"
+	                control="map.control"
+	                >
+	            <!--to add as a map control -->
+	            <ui-gmap-search-box options="searchbox.options" 
+	            					template="searchbox.template"
+	                            	events="searchbox.events" 
+	                            	position="searchbox.position"></ui-gmap-search-box>
+
+	            <!--to add to a parent div-->
+	            <!--<ui-gmap-search-box options="searchbox.options" template="searchbox.template" events="searchbox.events" parentdiv="searchbox.parentdiv"></ui-gmap-search-box>-->
+
+	            <!-- fit="map.doFit" -->
+	            <ui-gmap-markers ng-if="map.showMarkers"
+	            				 models="map.markers" 
+	            				 coords="'coords'" 
+                				 idkey="'key'"
+	            				 icon="'icon'"
+			                	 doCluster="map.doCluster"
+                				 control="map.control"
+	                			 options="map.options"
+	                             click="'onClicked'"></ui-gmap-markers>
+
+	            <ui-gmap-window coords="selected" 
+	            				idkey="selected.place_id" 
+	            				templateurl="selected.templateurl"
+	                            templateparameter="selected.templateparameter" 
+	                            options="selected.options"
+	                            closeClick='selected.closeClick()' ng-cloak>
+
+	            </ui-gmap-window>
+
+
+	        </ui-gmap-google-map>
+		</div>
+
+		<div class="col-sm-8" style="margin-top: 10px;">
+			<!-- <div class="btn-group btn-group-justified">
+				<a href="javascript:void(0);" class="btn btn-primary"><i class="fa fa-search"></i> 搜尋</a>
+				<a href="javascript:void(0);" class="btn btn-success"><i class="fa fa-file-excel-o"></i> 匯出成Excel</a>
+				<a href="javascript:void(0);" class="btn btn-warning" data-ng-click="AddData()"><i class="fa fa-plus-circle"></i> 新增</a>
+			</div> -->
+
+			<ul class="demo-btns">
+				<!-- <li>
+					<a href="javascript:void(0);" class="btn btn-labeled btn-primary"> 
+						<span class="btn-label">
+							<i class="fa fa-search"></i></span>搜尋 
+					</a>
+				</li> -->
+				<li>
+					<a href="javascript:void(0);" class="btn btn-labeled btn-success" data-ng-click="export()"> 
+						<span class="btn-label">
+							<i class="fa fa-file-excel-o"></i></span>匯出成Excel 
+					</a>
+				</li>
+				<li data-ng-if="au.right">
+					<a href="javascript:void(0);" class="btn btn-labeled btn-warning" data-ng-click="AddData()"> 
+						<span class="btn-label">
+							<i class="fa fa-plus-circle"></i></span>新增 
+					</a>
+				</li>
+				<li>
+				    <div class="btn-group">
+				        <label class="btn btn-primary" ng-model="radioModel" btn-radio="'Monitor0'" ng-click="addMarkers(monitorData, 'Monitor0')">路口監視器</label>
+				        <label class="btn btn-primary" ng-model="radioModel" btn-radio="'Monitor1'" ng-click="addMarkers(monitorData, 'Monitor1')">民間監視器</label>
+				        <label class="btn btn-primary" ng-model="radioModel" btn-radio="'MonitorAll'" ng-click="addMarkers(monitorData, 'MonitorAll')">所有監視器</label>
+				    </div>
+				</li>
+			</ul>
+		</div>
+
+		 <!-- infinite-scroll="reload(page)" infinite-scroll-distance="1" -->
+		<div class="col-sm-12 well" data-ng-init="loadMonitorData(UserInfo.U_Police)">
+			<div ui-grid="monitorOptions" ui-grid-resize-columns ui-grid-edit ui-grid-row-edit external-scopes="monitores" ui-grid-selection ui-grid-exporter style="height: 500px;"></div>
+		</div>
+	
+</div>
+<!-- End of Row -->
+
+<link href="css/google-map.css" rel="stylesheet" type="text/css">
+
+<script type="text/ng-template" id="addData.html">
+    <div class="modal-header">
+		<h3 class="modal-title">
+			<strong>新增 <code>*為必填欄位</code></strong>
+		</h3>
+    </div>
+    <div class="modal-body">
+		<div class="row">
+			<div class="col-sm-6">
+				<form class="form-horizontal">
+		    		<fieldset>
+						<div class="form-group">
+							<div class="col-md-12">
+								<ui-gmap-google-map center="map.center"
+									                zoom="map.zoom"
+									                dragging="map.dragging"
+									                bounds="map.bounds"
+									                events="map.events"
+									                pan="true"
+									                control="map.control">
+
+						            <ui-gmap-markers models="map.markers" 
+						            				 coords="'coords'" 
+					                				 idkey="'key'"
+					                				 options="'options'"></ui-gmap-markers>
+
+						        </ui-gmap-google-map>
+							</div>
+						</div>
+					</fieldset>
+		    	</form>
+			</div>
+			<div class="col-sm-6">
+		    	<form class="form-horizontal">
+		    		<fieldset>
+						<!--<div class="form-group">
+							<label class="col-md-3 control-label"><code>*</code>緯度</label>
+							<div class="col-md-9">
+								<input class="form-control" placeholder="緯度" type="number" data-ng-model="selected.M_Latitude">
+								<p class="note" data-ng-show="pkeyWarning">
+									已有相同經度和緯度
+								</p>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label"><code>*</code>經度</label>
+							<div class="col-md-9">
+								<input class="form-control" placeholder="經度" type="number" data-ng-model="selected.M_Longitude">
+								<p class="note" data-ng-show="pkeyWarning">
+									已有相同經度和緯度
+								</p>
+							</div>
+						</div>-->
+						<div class="form-group">
+							<label class="col-md-3 control-label"><code>*</code>地址</label>
+							<div class="col-md-9">
+								<input class="form-control" placeholder="地址" type="text" data-ng-model="selected.M_Addr" data-ng-keyup="AddrToLL()">
+								<p class="note">
+									( 緯度, 經度 ) = ( {{selected.M_Latitude == '' ? 0 : selected.M_Latitude}}, {{selected.M_Longitude == '' ? 0 : selected.M_Longitude}} )
+								</p>
+								<p class="note" data-ng-show="pkeyWarning">
+									此地址已有相同經度和緯度
+								</p>
+							</div>
+						</div>
+						<div class="form-group" data-ng-if="UserInfo.U_Role == 'Admin'">
+							<label class="col-md-3 control-label">分局</label>
+							<div class="col-md-9">
+		    					<select class="form-control" data-ng-model="selected.M_Branch" ng-options="branch.id as branch.M_Branch for branch in branchConstant" data-ng-change="policeConstant.filterPolice(selected.M_Branch)">
+		    						<option value="">-- 選擇分局 --</option>
+		    					</select>
+							</div>
+						</div>
+						<div class="form-group" data-ng-if="UserInfo.U_Role == 'Admin'">
+							<label class="col-md-3 control-label">派出所</label>
+							<div class="col-md-9">
+		    					<select class="form-control" data-ng-model="selected.M_Police" ng-options="police.id as police.M_Police for police in policeConstant.police" data-ng-disabled="!selected.M_Branch.toString()">
+		    						<option value="">-- 選擇派出所 --</option>
+		    					</select>
+							</div>
+						</div>
+						<div class="form-group" data-ng-if="UserInfo.U_Role == 'User'" data-ng-init="policeConstant.filterPolice(selected.M_Branch)">
+							<label class="col-md-3 control-label">分局</label>
+							<div class="col-md-9">
+		    					<select class="form-control" data-ng-model="selected.M_Branch" ng-options="branch.id as branch.M_Branch for branch in branchConstant" data-ng-disabled="true">
+		    						<option value="">-- 選擇派出所 --</option>
+		    					</select>
+							</div>
+						</div>
+						<div class="form-group" data-ng-if="UserInfo.U_Role == 'User'">
+							<label class="col-md-3 control-label">派出所</label>
+							<div class="col-md-9">
+		    					<select class="form-control" data-ng-model="selected.M_Police" ng-options="police.id as police.M_Police for police in policeConstant.police" data-ng-disabled="true">
+		    						<option value="">-- 選擇派出所 --</option>
+		    					</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">種類</label>
+							<div class="col-md-9">
+		    					<select class="form-control" data-ng-model="selected.M_Type" ng-options="monitor.id as monitor.M_Type for monitor in monitorConstant">
+		    						<option value="">-- 選擇種類 --</option>
+		    					</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">方向</label>
+							<div class="col-md-9">
+		    					<select class="form-control" data-ng-model="selected.M_Direction" ng-options="direction.id as direction.M_Direction for direction in directionConstant">
+		    						<option value="">-- 選擇方向 --</option>
+		    					</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">故障</label>
+							<div class="col-md-9">
+		    					<select class="form-control" data-ng-model="selected.M_Malfunction" ng-options="boolean.id as boolean.M_Malfunction for boolean in booleanConstant">
+		    						<option value="">-- 是否故障 --</option>
+		    					</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label">備註</label>
+							<div class="col-md-9">
+								<textarea class="form-control" placeholder="備註" rows="3" data-ng-model="selected.M_Remark"></textarea>
+							</div>
+						</div>
+						<div class="form-group" data-ng-show="show">
+							<div class="alert alert-danger alert-block">
+								<a class="close" data-dismiss="alert" href="#">×</a>
+								尚有欄位未輸入或輸入錯誤。
+							</div>
+						</div>
+					</fieldset>
+		    	</form>
+			</div>
+		</div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok(selected)">新增</button>
+        <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="deleteData.html">
+	<div class="modal-header">
+		<h3 class="modal-title">
+			<strong class="label label-danger">訊息</strong>
+		</h3>
+    </div>
+    <div class="modal-body">
+    	<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th width="50%">名稱</th>
+					<th width="50%">內容</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="data in selected">
+					<td>
+					<code>
+						{{data.name}}
+					</code></td>
+					<td>{{data.content}}</td>
+				</tr>
+			</tbody>
+		</table>
+    	<p>{{selected.C_Plate}}</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-danger" ng-click="ok(selected)">刪除</button>
+        <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="detailData.html">
+	<div class="modal-header">
+		<h3 class="modal-title">
+			<strong class="label label-info">詳細資訊</strong>
+		</h3>
+    </div>
+    <div class="modal-body">
+    	<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th width="50%">名稱</th>
+					<th width="50%">內容</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="data in selected">
+					<td><strong class="txt-color-blue">
+						{{data.name}}</strong>
+						</td>
+					<td>{{data.content}}</td>
+				</tr>
+			</tbody>
+		</table>
+    	<p>{{selected.C_Plate}}</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">確認</button>
+        <!--<button class="btn btn-default" ng-click="cancel()">取消</button>-->
+    </div>
+</script>
+
+<script type="text/javascript">
+	/* DO NOT REMOVE : GLOBAL FUNCTIONS!
+	 *
+	 * pageSetUp(); WILL CALL THE FOLLOWING FUNCTIONS
+	 *
+	 * // activate tooltips
+	 * $("[rel=tooltip]").tooltip();
+	 *
+	 * // activate popovers
+	 * $("[rel=popover]").popover();
+	 *
+	 * // activate popovers with hover states
+	 * $("[rel=popover-hover]").popover({ trigger: "hover" });
+	 *
+	 * // activate inline charts
+	 * runAllCharts();
+	 *
+	 * // setup widgets
+	 * setup_widgets_desktop();
+	 *
+	 * // run form elements
+	 * runAllForms();
+	 *
+	 ********************************
+	 *
+	 * pageSetUp() is needed whenever you load a page.
+	 * It initializes and checks for all basic elements of the page
+	 * and makes rendering easier.
+	 *
+	 */
+
+	pageSetUp();
+
+	/*
+	 * ALL PAGE RELATED SCRIPTS CAN GO BELOW HERE
+	 * eg alert("my home function");
+	 *
+	 * var pagefunction = function() {
+	 *   ...
+	 * }
+	 * loadScript("js/plugin/_PLUGIN_NAME_.js", pagefunction);
+	 *
+	 * TO LOAD A SCRIPT:
+	 * var pagefunction = function (){
+	 *  loadScript(".../plugin.js", run_after_loaded);
+	 * }
+	 *
+	 * OR
+	 *
+	 * loadScript(".../plugin.js", run_after_loaded);
+	 */
+
+	// pagefunction
+	
+	var pagefunction = function() {
+
+
+	}; 
+	
+	// end pagefunction
+	
+	// run pagefunction
+	
+	pagefunction();
+
+</script>

@@ -1,0 +1,118 @@
+<div class="dt-toolbar" style="min-height: 47px;">
+	<form>
+		<div class="col-xs-12 col-sm-2 text-left">
+			<i class="fa fa-building fa-lg txt-color-blue"></i>
+			<label class="font-md txt-color-blue">&nbsp;輸入名稱</label>
+		</div>
+		<!-- <div class="col-xs-12 col-sm-2 smart-form">
+			<div class="form-group">
+				<label class="input">
+					<input type="text"
+						   class="input"
+						   id="organization" 
+						   name="organization" 
+						   data-ng-model="organization"
+						   placeholder="部門">
+					<b class="tooltip tooltip-top-left">例如: 法務部</b> 
+				</label>
+			</div>
+		</div> -->
+		<div class="col-xs-12 col-sm-2 smart-form">
+			<div class="form-group">
+				<label class="input">
+					<input type="text"
+						   class="input"
+						   id="unit" 
+						   name="unit" 
+						   data-ng-model="unit"
+						   placeholder="單位">
+					<b class="tooltip tooltip-top-left">例如: 第一分局</b> 
+				</label>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-2">
+			
+		</div>
+		<div class="col-xs-12 col-sm-2">
+			
+		</div>
+		<div class="col-xs-12 col-sm-2">
+			
+		</div>
+		<div class="col-xs-12 col-sm-2 text-right">
+			<button type="button" 
+					class="btn btn-labeled btn-warning"
+					data-ng-click="AddOrganization(unit)">
+			 	<span class="btn-label">
+			  		<i class="fa fa-plus-square-o"></i>
+			 	</span>新增確認
+			</button>
+		</div>
+	</form>
+</div>
+
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover" style="margin-bottom: 0px">
+		<thead>
+			<tr>
+				<th>單位</th>
+				<th class="text-center" style="width:5%">
+					刪除
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+
+			<tr data-ng-repeat="data in departmentData.slice((ODcurrentPage - 1) * 10, (ODcurrentPage - 1) * 10 + 10)">
+				<td>{{data.D_NAME}}</td>
+				<td class="text-center">
+					<a href="javascript:void(0);" 
+					class="btn btn-danger btn-xs txt-color-white"
+					data-ng-click="deleteData(data,'部門單位')">
+						<i class="fa fa-minus-square fa-lg"></i>
+					</a>
+				</td>
+			</tr>
+
+		</tbody>
+	</table>
+	
+</div>
+
+<div class="dt-toolbar-footer">
+	<div class="col-xs-12 col-sm-12 hidden-xs text-center"
+		 data-ng-if="numFoundOD == 0">
+		<strong>無資料</strong>
+	</div>
+	<div class="col-xs-12 col-sm-6 hidden-xs"
+		 data-ng-if="numFoundOD > 0">
+		 
+	</div>
+	<div class="col-xs-12 col-sm-6"
+		 data-ng-if="numFoundOD > 0">
+		<pagination style="margin: 5px 0 5px 0;"
+					total-items="numFoundOD" 
+					ng-model="ODcurrentPage"
+					data-ng-click="SelectPage(ODcurrentPage, '自訂部門單位')"
+					max-size="maxSize" 
+					class="pagination-sm" 
+					boundary-links="true"
+					rotate="false" 
+					num-pages="numPages"></pagination>
+	</div>
+</div>
+
+<script type="text/ng-template" id="部門單位.html">
+    <div class="modal-header">
+		<h3 class="modal-title text-danger">
+			刪除資料內容
+		</h3>
+    </div>
+    <div class="modal-body">
+		<p>單位:<span class="text-success">&nbsp{{items.D_NAME}}</span></p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">確認刪除</button>
+        <button class="btn btn-warning" ng-click="cancel()">取消</button>
+    </div>
+</script>

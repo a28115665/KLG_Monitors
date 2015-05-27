@@ -1,0 +1,308 @@
+<div class="dt-toolbar">
+	<form>
+		<div class="col-xs-12 col-sm-2 text-left">
+			<!-- <i class="fa fa-clock-o fa-lg txt-color-blue"></i>
+			<label class="font-md txt-color-blue">&nbsp;選擇搜尋時間</label> -->
+		</div>
+		<div class="col-xs-12 col-sm-2">
+			<!-- <div class="form-group">
+				<div class="input-group">
+					<input class="form-control" 
+					   	   id="from2" 
+					   	   type="text" 
+					   	   placeholder="從"
+					   	   data-ng-model="BLtime.from">
+					<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+				</div>
+			</div> -->
+		</div>
+		<div class="col-xs-12 col-sm-2">
+			<!-- <div class="form-group">
+				<div class="input-group">
+					<input class="form-control" 
+					   	   id="to2" 
+					   	   type="text" 
+					   	   placeholder="到"
+					   	   data-ng-model="BLtime.to">
+					<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+				</div>
+			</div> -->
+		</div>
+		<div class="col-xs-12 col-sm-2"
+			 data-ng-if="BLtime.search == false">
+			<!-- <a class="btn btn-primary btn-block" 
+			   href="javascript:void(0);"
+			   data-ng-click="SearchFromDatePicker(BLtime.from, BLtime.to, '公佈欄')">搜尋</a> -->
+		</div>
+		<div class="col-xs-12 col-sm-2"
+			 data-ng-if="BLtime.search == true">
+			<!-- <a class="btn btn-danger btn-block" 
+			   href="javascript:void(0);"
+			   data-ng-click="ClearSearchFromDatePicker(BLtime.from, BLtime.to, '公佈欄')">取消搜尋</a> -->
+		</div>
+		<div class="col-xs-12 col-sm-2 text-right">
+			<!-- <button type="button" 
+					class="btn btn-labeled btn-success"
+					data-ng-click="postNewsOnBoard()">
+			 	<span class="btn-label">
+			  		<i class="fa fa-bullhorn"></i>
+			 	</span>發佈新訊息
+			</button> -->
+		</div>
+		<div class="col-xs-12 col-sm-2 text-right">
+			<button type="button" 
+					class="btn btn-labeled btn-warning"
+					data-ng-click="SetOnTop5(bulletinData)">
+			 	<span class="btn-label">
+			  		<i class="fa fa-unlock-alt"></i>
+			 	</span>公佈欄至頂確認
+			</button>
+		</div>
+	</form>
+</div>
+
+<div class="table-responsive">
+	<table class="table table-bordered table-striped table-condensed table-hover smart-form has-tickbox">
+		<thead>
+			<tr>
+				<th class="text-center">
+					<i class="fa fa-unlock-alt"></i>
+				</th>
+				<th>公佈者</th>
+				<th>單位</th>
+				<th>標題</th>
+				<th>發佈時間</th>
+				<th class="text-center" style="width:5%">
+					編輯
+				</th>
+				<th class="text-center" style="width:5%">
+					刪除
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-ng-repeat="data in filteredBoardStores.slice((currentPageBL - 1) * 10, (currentPageBL - 1) * 10 + 10)">
+				<td class="text-center">
+					<span class="onoffswitch">
+						<input data-ng-if="data.B_Top5Lock == true"
+							   type="checkbox" 
+							   name="start_interval" 
+							   class="onoffswitch-checkbox"
+							   id="st{{$index}}"
+							   data-ng-click="ChangeTop5Lock($index)"
+							   checked>
+						<input data-ng-if="data.B_Top5Lock == false"
+							   type="checkbox" 
+							   name="start_interval" 
+							   class="onoffswitch-checkbox"
+							   data-ng-click="ChangeTop5Lock($index)" 
+							   id="st{{$index}}">
+						<label class="onoffswitch-label" 
+							   for="st{{$index}}"> 
+							<span class="onoffswitch-inner" data-swchon-text="YES" data-swchoff-text="NO">
+
+							</span> 
+							<span class="onoffswitch-switch"></span> 
+						</label> 
+					</span>
+				</td>
+				<td>{{data.B_User}}</td>
+				<td>{{data.U_Department}}</td>
+				<td>
+					<a href="javascript:void(0);"
+					   data-ng-click="openNewsOnBoard(data)">
+						{{data.B_Topic}}
+					</a>
+				</td>
+				<td>{{data.B_PublishDT}}</td>
+				<td class="text-center">
+					<a href="javascript:void(0);" 
+					class="btn btn-success btn-xs txt-color-white"
+					data-ng-click="editorData(data,'公佈欄')">
+						<i class="fa fa-pencil-square-o fa-lg"></i>
+					</a>
+				</td>
+				<td class="text-center">
+					<a href="javascript:void(0);" 
+					class="btn btn-danger btn-xs txt-color-white"
+					data-ng-click="deleteData(data,'公佈欄')">
+						<i class="fa fa-minus-square fa-lg"></i>
+					</a>
+				</td>
+			</tr>
+
+		</tbody>
+	</table>
+	
+</div>
+
+<div class="dt-toolbar-footer">
+	<div class="col-xs-12 col-sm-12 hidden-xs text-center"
+		 data-ng-if="filteredBoardStores.length == 0">
+		<strong>無資料</strong>
+	</div>
+	<div class="col-xs-12 col-sm-6 hidden-xs"
+		 data-ng-if="filteredBoardStores.length > 0">
+	</div>
+	<div class="col-xs-12 col-sm-6"
+		 data-ng-if="filteredBoardStores.length > 0">
+		<pagination style="margin: 5px 0 5px 0;"
+					total-items="filteredBoardStores.length" 
+					ng-model="currentPageBL" 
+					data-ng-click="SelectPage(currentPageBL, '公佈欄')"
+					max-size="maxSize" 
+					class="pagination-sm" 
+					boundary-links="true"
+					rotate="false" 
+					num-pages="numPages"></pagination>
+	</div>
+</div>
+
+<script type="text/ng-template" id="editorBulletin.html">
+    <div class="modal-header">
+		<div class="modal-title">
+			<input class="form-control"
+			 	   placeholder="輸入你的標題" 
+			 	   type="text"
+			 	   data-ng-model="selected.B_Topic">
+		</div>
+    </div>
+    <div class="modal-body">
+        <editor-form uploadpath="uploadURL" foldername="folderName" content="selected.B_Content" files="selected.B_Files" ></editor-form>
+		<form action="" 
+			  method="post"
+			  target="id_iframe"
+              enctype="multipart/form-data">
+	    	<div class="widget-footer smart-form">
+
+				<div class="btn-group pull-left">
+					<div class="form-group">
+						<input id="attachments"
+							   type="file" 
+							   name="file" 
+							   class="btn btn-default"
+							   style="margin-top:5px;"
+							   ng-file-select="topicAttachments($files)"
+							   multiple/>
+					</div>
+				</div>
+
+				<div class="btn-group pull-left">
+	                <div class="form-group" style="min-height: 30px;padding-top: 5px;padding-left: 5px;">
+	                    <strong class="text-info">上傳檔案大小限制</strong><strong class="text-danger"> 25 MB</strong><strong class="text-info">以下</strong>
+	                </div>
+	            </div>
+			</div>
+		</form>
+		<div class="bar-holder" ng-show="(selectedFiles != null) && (uploading == true)">
+			<div class="row sel-file" ng-repeat="f in selectedFiles">
+				<p>
+					<strong class="text-warning"><i>{{($index + 1)}}</i></strong> 
+					<img style="width:16px;height: 16px;" ng-show="dataUrls[$index]" ng-src="{{dataUrls[$index]}}">
+					<strong>{{f.name}}</strong> <code>{{fileSize(f.size)}}</code>
+					
+					<span class="txt-color-green pull-right" ng-show="progress[$index] == 100"><i class="fa fa-lg fa-check"></i></span>
+					<strong class="text-success pull-right">{{progress[$index]}}%</strong>
+					<a class="btn btn-danger btn-xs pull-right" href="javascript:void(0);" ng-click="abort($index)" ng-show="hasUploader($index) && progress[$index] < 100"><i class="fa fa-remove"></i> 中斷</a>
+				</p>
+				<div class="progress progress-xs">
+					<div class="progress progress-xs" ng-show="progress[$index] >= -1">
+						<div class="progress-bar bg-color-blue" role="progressbar" style="width: {{progress[$index]}}%;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success" ng-click="ok(selected.B_Topic, attachments, UserInfo)">確認編輯</button>
+        <button class="btn btn-warning" ng-click="cancel()">取消</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="公佈欄.html">
+    <div class="modal-header">
+		<h3 class="modal-title text-danger">
+			刪除資料內容
+		</h3>
+    </div>
+    <div class="modal-body">
+    	<p>公佈者:<span class="text-success">&nbsp{{items.B_User}}</span></p>
+		<p>標題:<span class="text-success">&nbsp{{items.B_Topic}}</span></p>
+		<p>發佈時間:<span class="text-success">&nbsp{{items.B_PublishDT}}</span></p>
+		<p>內容:<post-content content="items.B_Content" files="items.B_Files"></post-content></p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">確認刪除</button>
+        <button class="btn btn-warning" ng-click="cancel()">取消</button>
+    </div>
+</script>
+
+<script type="text/javascript">
+	/* DO NOT REMOVE : GLOBAL FUNCTIONS!
+	 *
+	 * pageSetUp(); WILL CALL THE FOLLOWING FUNCTIONS
+	 *
+	 * // activate tooltips
+	 * $("[rel=tooltip]").tooltip();
+	 *
+	 * // activate popovers
+	 * $("[rel=popover]").popover();
+	 *
+	 * // activate popovers with hover states
+	 * $("[rel=popover-hover]").popover({ trigger: "hover" });
+	 *
+	 * // activate inline charts
+	 * runAllCharts();
+	 *
+	 * // setup widgets
+	 * setup_widgets_desktop();
+	 *
+	 * // run form elements
+	 * runAllForms();
+	 *
+	 ********************************
+	 *
+	 * pageSetUp() is needed whenever you load a page.
+	 * It initializes and checks for all basic elements of the page
+	 * and makes rendering easier.
+	 *
+	 */
+
+	pageSetUp();
+
+	// PAGE RELATED SCRIPTS		
+
+	// pagefunction
+	
+	var pagefunction = function() {
+
+		$("#to2").datepicker({
+		    defaultDate: "+1w",
+		    changeMonth: true,
+		    numberOfMonths: 3,
+		    prevText: '<i class="fa fa-chevron-left"></i>',
+		    nextText: '<i class="fa fa-chevron-right"></i>',
+		    onClose: function (selectedDate) {
+		        $("#from2").datepicker("option", "maxDate", selectedDate);
+		    }
+
+		});
+		$("#from2").datepicker({
+		    defaultDate: "+1w",
+		    changeMonth: true,
+		    numberOfMonths: 3,
+		    prevText: '<i class="fa fa-chevron-left"></i>',
+		    nextText: '<i class="fa fa-chevron-right"></i>',
+		    onClose: function (selectedDate) {
+		        $("#to2").datepicker("option", "minDate", selectedDate);
+		    }
+		});
+	};
+	
+	// end pagefunction
+	
+	// load bootstrap-progress bar script and run pagefunction
+	// loadScript("js/plugin/bootstrap-progressbar/bootstrap-progressbar.min.js", pagefunction);
+	loadScript("js/plugin/jquery-form/jquery-form.min.js", pagefunction);
+
+</script>

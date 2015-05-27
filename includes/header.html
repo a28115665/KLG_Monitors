@@ -1,0 +1,226 @@
+		
+			<div id="logo-group">
+
+				<!-- PLACE YOUR LOGO HERE -->
+				<span id="logo"> <img src="img/KLG_MonitorsBanner.png" alt="SmartAdmin" style="width: 220px;"> </span>
+				<!-- END LOGO PLACEHOLDER -->
+			</div>
+
+			<!-- projects dropdown -->
+			<div class="project-context hidden-xs">
+
+				<!-- <span class="label"><span data-localize="測試用:">測試用:</span></span>
+				<span class="project-selector" class="popover-trigger-element dropdown-toggle" data-toggle="dropdown"><span data-localize="權限">權限 </span> <i class="fa fa-angle-down"></i></span> -->
+
+				<!-- Suggestion: populate this list with fetch and push technique -->
+				<!-- <ul class="dropdown-menu" data-ng-controller="HeaderCtrl">
+					<li>
+						<a href="javascript:void(0);"
+						   data-ng-click="ChangePermissions(0, 'Administrator', 'Admin')">Admin</a>
+					</li>
+					<li>
+						<a href="javascript:void(0);"
+						   data-ng-click="ChangePermissions(1, 'User01', 'User')">User</a>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<a href="javascript:void(0);"><i class="fa fa-power-off"></i> Clear</a>
+					</li>
+				</ul> -->
+				<!-- end dropdown-menu-->
+
+			</div>
+			<!-- end projects dropdown -->
+
+			<!-- pulled right: nav area -->
+			<div class="pull-right" data-ng-controller="HeaderCtrl">
+				
+				<!-- collapse menu button -->
+				<div id="hide-menu" class="btn-header pull-right" data-ng-if="UserInfo.U_Role == 'Admin' || UserInfo.U_Role == 'User'">
+					<span> <a href="javascript:void(0);" data-action="toggleMenu" title="選單縮移"><i class="fa fa-reorder"></i></a> </span>
+				</div>
+				<!-- end collapse menu -->
+
+				<!-- login button data-ng-click="login(credentials)"-->
+				<div id="login" class="btn-header transparent pull-right" data-ng-if="UserInfo == null" data-ng-controller="LoginPageCtrl">
+					<span> <a href="#" 
+						      title="登入" 
+						      data-ng-click="openLogin(credentials)"><i class="fa fa-sign-in"></i></a> </span>
+				</div>
+				<!-- end login button -->
+
+				<!-- register button -->
+				<div id="register" class="btn-header transparent pull-right" data-ng-if="UserInfo == null" data-ng-controller="RegisterController">
+					<span> <a href="#" 
+						      title="註冊" 
+						      data-ng-click="openRegister(registers)"><i class="fa fa-pencil-square-o"></i></a> </span>
+				</div>
+				<!-- end register button -->
+
+				<!-- logout button -->
+				<div id="logout" class="btn-header transparent pull-right" data-ng-if="UserInfo.U_Role == 'Admin' || UserInfo.U_Role == 'User'">
+					<span> <a href="#" 
+						      title="登出" 
+						      data-action="userLogout" 
+						      data-logout-msg=""
+						      data-ng-click="logout()"><i class="fa fa-sign-out"></i></a> </span>
+				</div>
+				<!-- end logout button -->
+
+				<!-- fullscreen button -->
+				<!-- <div id="fullscreen" class="btn-header transparent pull-right">
+					<span> <a href="javascript:void(0);" data-action="launchFullscreen" title="Full Screen"><i class="fa fa-arrows-alt"></i></a> </span>
+				</div> -->
+				<!-- end fullscreen button -->
+
+			</div>
+			<!-- end pulled right: nav area -->
+
+
+<script type="text/ng-template" id="login.html">
+    <div class="modal-header">
+		<h3 class="modal-title">
+			<strong class="txt-color-orangeDark">登入</strong>
+		</h3>
+    </div>
+    <div class="modal-body">
+    	<div class='form-group'>
+			<div class='input-group no-margin margin-top-5'>
+				<span class='input-group-addon'><i class='fa fa-user fa-lg fa-fw txt-color-orangeDark'></i></span>
+				<input class='form-control input-lg'
+					   style='background-color: rgba(0,0,0,0); color: WHITE;'
+					   placeholder='帳號'
+					   type='text'
+					   name='name'
+					   id='name'
+					   data-ng-model='credentials.U_ID'
+					   required>
+			</div>
+			<div class='input-group no-margin margin-top-5'>
+				<span class='input-group-addon'><i class='fa fa-key fa-lg fa-fw txt-color-orangeDark'></i></span>
+				<input class='form-control input-lg'
+					   style='background-color: rgba(0,0,0,0); color: WHITE;'
+					   placeholder='密碼'
+					   type='password'
+					   name='pass'
+					   id='pass'
+					   data-ng-model='credentials.U_PW'
+					   required>
+			</div>
+		</div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok(credentials)">登入</button>
+        <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+
+	<style type="text/css">
+		.modal-content{
+			background: rgba(0,0,0,0.5);
+		}
+		.input-group-addon{
+			background-color: rgba(0,0,0,0);
+			border: 0px solid;
+		}
+	</style>
+</script>
+
+<script type="text/ng-template" id="register.html">
+    <div class="modal-header">
+		<h3 class="modal-title">
+			<strong class="txt-color-teal">註冊</strong>
+		</h3>
+    </div>
+    <div class="modal-body">
+		<div class="form-group" data-ng-init="loadBranchAndPolice()">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fa fa-sun-o fa-lg fa-fw txt-color-teal"></i></span>
+				<select class="form-control input-lg"
+					    style='background-color: rgba(0,0,0,0); color: WHITE;' 
+					    data-ng-model="registers.U_Branch" 
+					    ng-options="data.id as data.U_Branch for data in registerBranch"
+					    data-ng-change="registerPolice.filterPolice(registers.U_Branch, registerFullPolice)">
+					<option value="">-- 請選擇分局 --</option>
+				</select>
+			</div>
+			<div class="input-group no-margin margin-top-5">
+				<span class="input-group-addon"><i class="fa fa-building fa-lg fa-fw txt-color-teal"></i></span>
+				<select class="form-control input-lg"
+					    style='background-color: rgba(0,0,0,0); color: WHITE;' 
+					    data-ng-model="registers.U_Police" 
+					    ng-options="data.id as data.U_Police for data in registerPolice.police"
+					    data-ng-disabled="!registers.U_Branch.toString()">
+						<option value="">-- 選擇派出所 --</option>
+				</select>
+			</div>
+			<div class="input-group no-margin margin-top-5">
+				<span class="input-group-addon"><i class="fa fa-tag fa-lg fa-fw txt-color-teal"></i></span>
+				<input class="form-control input-lg" 
+					   style='background-color: rgba(0,0,0,0); color: WHITE;'
+					   placeholder="帳號" 
+					   type="text" 
+					   name="name" 
+					   id="name" 
+					   data-ng-model="registers.U_ID"
+					   required>
+			</div>
+			<div class="input-group no-margin margin-top-5">
+				<span class="input-group-addon"><i class="fa fa-key fa-lg fa-fw txt-color-teal"></i></span>
+				<input class="form-control input-lg" 
+					   style='background-color: rgba(0,0,0,0); color: WHITE;'
+					   placeholder="密碼(長度6-12)" 
+					   type="password" 
+					   name="pass" 
+					   id="pass" 
+					   data-ng-model="registers.U_PW"
+					   required>
+			</div>
+			<div class="input-group no-margin margin-top-5">
+				<span class="input-group-addon"><i class="fa fa-user fa-lg fa-fw txt-color-teal"></i></span>
+				<input class="form-control input-lg" 
+					   style='background-color: rgba(0,0,0,0); color: WHITE;'
+					   placeholder="名稱" 
+					   type="text" 
+					   name="name" 
+					   id="name" 
+					   data-ng-model="registers.U_Name"
+					   required>
+			</div>
+			<div class="form-group no-margin margin-top-5">
+                <div class="alert alert-danger" 
+            		 style="background-color: rgba(194,101,101,0.7);"
+                     data-ng-show="show['Error'].bool">
+                     {{show['Error'].Messages}}
+                </div>
+            </div>
+            <div class="form-group no-margin margin-top-5">
+                <div class="alert alert-success" 
+            		 style="background-color: rgba(138,195,139,0.7);"
+                     data-ng-show="show['Success'].bool">
+                     {{show['Success'].Messages}}
+                </div>
+            </div>
+		</div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success" ng-click="ok(registers)">註冊</button>
+        <button class="btn btn-default" ng-click="cancel()">取消</button>
+    </div>
+
+	<style type="text/css">
+		.modal-content{
+			background: rgba(0,0,0,0.5);
+		}
+		.input-group-addon{
+			background-color: rgba(0,0,0,0);
+			border: 0px solid;
+		}
+		input{
+			background-color: rgba(0,0,0,0); 
+			color: WHITE;
+		}
+		option{
+		    color: #568a89!important;
+		}
+	</style>
+</script>

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en-us" data-ng-app="smartApp">
+	<head>
+		<meta charset="utf-8">
+		<!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
+
+		<title> 凌群電腦 </title>
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<!-- Use the correct meta names below for your web application
+			 Ref: http://davidbcalhoun.com/2010/viewport-metatag 
+			 
+		<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">-->
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<!-- Basic Styles -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">	
+		<link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
+
+		<!-- SmartAdmin Styles : Please note (smartadmin-production.css) was created using LESS variables -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.min.css">	
+		
+		<!-- SmartAdmin RTL Support is under construction
+			<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-rtl.css"> -->
+		
+		<!-- Demo purpose only: goes with demo.js, you can delete this css when designing your own WebApp -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/demo.min.css">
+
+		<!-- page related CSS -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/lockscreen.min.css">
+
+		<!-- FAVICONS -->
+		<link rel="shortcut icon" href="img/favicon/favicon_syscom.png" type="image/x-icon">
+		<link rel="icon" href="img/favicon/favicon_syscom.png" type="image/x-icon">
+
+		<!-- GOOGLE FONT -->
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+
+		<!-- Angularjs-Toaster -->
+  		<link rel="stylesheet" href="css/toaster.css" />
+
+	</head>
+	<body>
+		<toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
+		<div id="lock" role="main" class="lockscreen animated flipInY">
+
+			<!-- MAIN CONTENT -->
+
+			<form id="login" 
+				  action="index.html" 
+				  data-ng-controller="LoginPageCtrl">
+				<img src="img/syscom.png" alt="" />
+				<div class="logo" style="padding: 5px 0;">
+					<!-- <h1 class="semi-bold"></h1> -->
+				</div>
+				<div class="media">
+					<a class="pull-left" href="javascript:void(0);"> 
+						<img src="img/avatars/Guest.png" alt="" width="120" height="120"/>
+					</a>
+
+					<div class="media-body">
+						<h1></h1>
+						<div class="form-group">
+							<div class="input-group no-margin margin-top-5">
+								<span class="input-group-addon"><i class="fa fa-envelope-o fa-lg fa-fw"></i></span>
+								<input class="form-control input-lg" 
+									   placeholder="E-Mail" 
+									   type="email" 
+									   name="email" 
+									   id="email"
+									   data-ng-model="credentials.U_Mail"
+									   required>
+							</div>
+							<div class="input-group no-margin margin-top-5">
+								<span class="input-group-addon"><i class="fa fa-key fa-lg fa-fw"></i></span>
+								<input class="form-control input-lg" 
+									   placeholder="Password" 
+									   type="password" 
+									   name="password" 
+									   id="password"
+									   data-ng-model="credentials.U_Password"
+									   required>
+							</div>
+						</div>
+						<div class="media">
+							<a href="javascript:void(0);" 
+							   class="btn btn-labeled btn-lg btn-danger pull-right"
+							   data-ng-click="login(credentials)"> 
+								<span class="btn-label">
+									<i class="fa fa-sign-in"></i>
+								</span>登入 
+							</a>
+							<div class="media-body">
+								<p>
+									註冊? <a href="#" class="flipLink" data-ng-click="clickSF('註冊')"> 按這</a> 
+								</p>
+								<p class="text-success">
+									訪客請直接登入
+									<!-- 訪客信箱:<strong>guest@gmail.com</strong> <br>
+									訪客密碼:<strong>guest</strong> -->
+								</p>
+								<!-- <p>
+									忘記密碼? <a href="#" class="forgot" data-ng-click="clickSF('忘記密碼')"> 按這</a>
+								</p> -->
+							</div>
+						</div>
+					</div>
+				</div>
+				<p class="font-xs margin-top-5">
+					
+
+				</p>
+			</form>
+			<form id="recover" method="post" action="./">
+				<img src="img/syscom.png" alt="" />
+				<div class="logo" style="padding: 5px 0;">
+					<!-- <h1 class="semi-bold"></h1> -->
+				</div>
+
+				<div class="media">
+					<a class="pull-left" href="javascript:void(0);" > 
+						<img src="img/avatars/Signup.png" alt="" width="120" height="120" style="margin-top:55px;"/>
+					</a>
+
+					<div class="media-body" data-ng-controller="RegisterController">
+						<h1></h1>
+						<div class="form-group">
+							<div class="input-group" data-ng-controller="SettingCtrl" data-ng-init="loadOrganizationData()">
+								<span class="input-group-addon"><i class="fa fa-bookmark fa-lg fa-fw"></i></span>
+								<select class="form-control input-lg" 
+									    data-ng-model="registers.U_Organization" 
+									    ng-options="data for data in mergeOUData">
+									<option value="">-- 請選擇類別 --</option>
+								</select>
+							</div>
+							<div class="input-group no-margin margin-top-5">
+								<span class="input-group-addon"><i class="fa fa-user fa-lg fa-fw"></i></span>
+								<input class="form-control input-lg" 
+									   placeholder="使用者名稱" 
+									   type="text" 
+									   name="name" 
+									   id="name" 
+									   data-ng-model="registers.U_Name"
+									   required>
+							</div>
+							<div class="input-group no-margin margin-top-5">
+								<span class="input-group-addon"><i class="fa fa-key fa-lg fa-fw"></i></span>
+								<input class="form-control input-lg" 
+									   placeholder="密碼長度6~12英數混合" 
+									   type="password" 
+									   name="pass" 
+									   id="pass" 
+									   data-ng-model="registers.U_Password"
+									   required>
+							</div>
+							<div class="input-group no-margin margin-top-5">
+								<span class="input-group-addon"><i class="fa fa-envelope-o fa-lg fa-fw"></i></span>
+								<input class="form-control input-lg" 
+									   placeholder="email@mail.moj.gov.tw" 
+									   type="text" 
+									   name="email" 
+									   id="email" 
+									   data-ng-model="registers.U_Mail"
+									   required>
+							</div>
+							<div class="form-group no-margin margin-top-5">
+	                            <div class="alert alert-danger" 
+	                                 data-ng-show="show['Error'].bool">
+	                                 {{show['Error'].Messages}}
+	                            </div>
+	                        </div>
+	                        <div class="form-group no-margin margin-top-5">
+	                            <div class="alert alert-success" 
+	                                 data-ng-show="show['Success'].bool">
+	                                 {{show['Success'].Messages}}
+	                            </div>
+	                        </div>
+						</div>
+						<p class="no-margin margin-top-5">
+							<span>
+							登入? <a href="#" class="flipLink"> 按這</a>
+							</span>
+
+							<a href="javascript:void(0);" 
+							   class="btn btn-labeled btn-warning pull-right"
+							   data-ng-click="register(registers)"> 
+								<span class="btn-label">
+									<i class="fa fa-group"></i>
+								</span>註冊 
+							</a>
+						</p>
+					</div>
+
+					<div class="media-body" data-ng-hide="true" ng-init="mail='222'">
+						<h2><strong>忘記密碼請輸入<code>E-Mail</code>查詢</strong></h2>
+						{{userEmail}}-{{mail}}
+						<div class="input-group no-margin margin-top-5">
+							<div class="input-group-btn">
+								<button class="btn btn-primary" Disabled>
+									<i class="fa fa-envelope-o" style="width: 13px;"></i>
+								</button>
+							</div>
+							<input class="form-control" 
+							   	   type="email" 
+							   	   placeholder="Email"
+							   	   data-ng-model="userEmail">
+						</div>
+						<p class="no-margin margin-top-5">
+							<span>
+							登入? <a href="#" class="forgot"> 按這</a>
+							</span>
+
+							<a href="javascript:void(0);" 
+							   class="btn btn-labeled btn-warning pull-right"
+							   data-ng-click="SendMail(userEmail)"> 
+								<span class="btn-label">
+									<i class="fa fa-group"></i>
+								</span>發送
+							</a>
+						</p>
+					</div>
+				</div>
+
+				<p class="font-xs margin-top-5">
+					
+
+				</p>
+			</form>
+
+		</div>
+
+		<!--================================================== -->	
+
+		<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
+		<script src="js/plugin/pace/pace.min.js"></script>
+
+	    <!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+	    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+		<script> if (!window.jQuery) { document.write('<script src="js/libs/jquery-2.0.2.min.js"><\/script>');} </script>
+
+	    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+		<script> if (!window.jQuery.ui) { document.write('<script src="js/libs/jquery-ui-1.10.3.min.js"><\/script>');} </script>
+
+		<!-- AngularJS -->
+		<script src="js/libs/angular/angular.js"></script>
+	  	<script src="js/libs/angular/angular-route.js"></script>
+	  	<script src="js/libs/angular/angular-animate.js"></script>
+	  	<script src="js/libs/angular/angular-cookies-1.0.0rc10.js"></script>
+	  	<script src="js/libs/angular/angular-file-upload.js"></script>
+	  	<script src="js/libs/angular/ui-bootstrap-custom-tpls-0.11.0.js"></script>
+
+		<!-- ANGULAR: Handled via "ribbon" directive
+		<script src="js/demo.js"></script>-->
+
+		<!-- Angularjs-Toaster -->
+	  	<script src="js/plugin/angularjs-toaster/toaster.js"></script>
+
+		<!-- MAIN ANGULAR JS FILE -->
+	  	<script src="js/ng/ng.app.js"></script>
+	  	<script src="js/ng/ng.controllers.js"></script>
+	  	<script src="js/ng/ng.directives.js"></script>
+
+	  	<!-- PLUNKER -->
+	  	<script src="js/ng/plunker.js"></script>
+
+		<!-- JS TOUCH : include this plugin for mobile drag / drop touch events 		
+		<script src="js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script> -->
+
+		<!-- BOOTSTRAP JS -->		
+		<script src="js/bootstrap/bootstrap.min.js"></script>
+
+		<!-- CUSTOM NOTIFICATION -->
+		<script src="js/notification/SmartNotification.min.js"></script>
+
+		<!-- JARVIS WIDGETS -->
+		<script src="js/smartwidgets/jarvis.widget.min.js"></script>
+		
+		<!-- EASY PIE CHARTS -->
+		<script src="js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
+		
+		<!-- SPARKLINES -->
+		<script src="js/plugin/sparkline/jquery.sparkline.min.js"></script>
+		
+		<!-- JQUERY VALIDATE -->
+		<script src="js/plugin/jquery-validate/jquery.validate.min.js"></script>
+		
+		<!-- JQUERY MASKED INPUT -->
+		<script src="js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+		
+		<!-- JQUERY SELECT2 INPUT -->
+		<script src="js/plugin/select2/select2.min.js"></script>
+
+		<!-- JQUERY UI + Bootstrap Slider -->
+		<script src="js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+		
+		<!-- browser msie issue fix -->
+		<script src="js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
+		
+		<!-- FastClick: For mobile devices -->
+		<script src="js/plugin/fastclick/fastclick.min.js"></script>
+		
+		<!--[if IE 7]>
+			
+			<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
+			
+		<![endif]-->
+		
+		<!-- MAIN APP JS FILE -->
+		<script src="js/app.js"></script>
+
+		<script type="text/javascript">
+
+		  	$.support.css3d = supportsCSS3D();
+	
+			var lock = $('#lock');
+			
+			// Listening for clicks on the ribbon links
+			$('.flipLink').click(function(e){
+				
+				// Flipping the forms
+				lock.toggleClass('flipped');
+				
+				// If there is no CSS3 3D support, simply
+				// hide the login form (exposing the recover one)
+				if(!$.support.css3d){
+					$('#login').toggle();
+				}
+				e.preventDefault();
+			});
+			
+			$('.forgot').click(function(e){
+				
+				// Flipping the forms
+				lock.toggleClass('flipped');
+				
+				// If there is no CSS3 3D support, simply
+				// hide the login form (exposing the recover one)
+				if(!$.support.css3d){
+					$('#login').toggle();
+				}
+				e.preventDefault();
+			});
+
+			lock.find('form').submit(function(e){
+				// Preventing form submissions. If you implement
+				// a backend, you might want to remove this code
+				e.preventDefault();
+			});
+			
+			
+			// A helper function that checks for the 
+			// support of the 3D CSS3 transformations.
+			function supportsCSS3D() {
+				var props = [
+					'perspectiveProperty', 'WebkitPerspective', 'MozPerspective'
+				], testDom = document.createElement('a');
+				  
+				for(var i=0; i<props.length; i++){
+					if(props[i] in testDom.style){
+						return true;
+					}
+				}
+				
+				return false;
+			}
+
+		</script>
+
+		<style type="text/css">
+		  	/*----------------------------
+				Styling the forms
+			-----------------------------*/
+
+
+			#lock{
+				/*width:288px;
+				height:321px;
+				margin:0 auto;
+				position:relative;
+				z-index:1;
+				
+				-moz-perspective: 800px;
+				-webkit-perspective: 800px;
+				perspective: 800px;*/
+			}
+
+			#lock form{
+				/*width:100%;
+				height:100%;*/
+				position:absolute;
+				top:0;
+				left:0;
+				
+				/* Enabling 3d space for the transforms */
+				-moz-transform-style: preserve-3d;
+				-webkit-transform-style: preserve-3d;
+				transform-style: preserve-3d;
+				
+				/* When the forms are flipped, they will be hidden */
+				-moz-backface-visibility: hidden;
+				-webkit-backface-visibility: hidden;
+				backface-visibility: hidden;
+				
+				/* Enabling a smooth animated transition */
+				-moz-transition:0.8s;
+				-webkit-transition:0.8s;
+				transition:0.8s;
+				
+				/* Configure a keyframe animation for Firefox */
+				-moz-animation: pulse 2s infinite;
+				
+				/* Configure it for Chrome and Safari */
+				-webkit-animation: pulse 2s infinite;
+			}
+
+			/* Firefox Keyframe Animation */
+			@-moz-keyframes pulse{
+				0%{		box-shadow:0 0 1px #008aff;}
+				50%{	box-shadow:0 0 8px #008aff;}
+				100%{	box-shadow:0 0 1px #008aff;}
+			}
+
+			/* Webkit keyframe animation */
+			@-webkit-keyframes pulse{
+				0%{		box-shadow:0 0 1px #008aff;}
+				50%{	box-shadow:0 0 10px #008aff;}
+				100%{	box-shadow:0 0 1px #008aff;}
+			}
+
+			#login{
+				/*background:url('../img/login_form_bg.jpg') no-repeat;*/
+				z-index:100;
+			}
+
+			#recover{
+				/*background:url('../img/recover_form_bg.jpg') no-repeat;*/
+				z-index:1;
+				opacity:0;
+				
+				/* Rotating the recover password form by default */
+				-moz-transform:rotateY(180deg);
+				-webkit-transform:rotateY(180deg);
+				transform:rotateY(180deg);
+			}
+
+			#lock.flipped #login{
+				
+				opacity:0;
+				
+				/**
+				 * Rotating the login form when the
+				 * flipped class is added to the container
+				 */
+				
+				-moz-transform:rotateY(-180deg);
+				-webkit-transform:rotateY(-180deg);
+				transform:rotateY(-180deg);
+			}
+
+			#lock.flipped #recover{
+				
+				opacity:1;
+				
+				/* Rotating the recover div into view */
+				-moz-transform:rotateY(0deg);
+				-webkit-transform:rotateY(0deg);
+				transform:rotateY(0deg);
+			}
+
+
+			/*----------------------------
+				Inputs, Buttons & Links
+			-----------------------------*/
+
+
+			#login .flipLink,
+			#recover .flipLink{
+				
+				/* The blue ribbon links */
+				
+				/*height: 65px;
+			    overflow: hidden;
+			    position: absolute;
+			    right: 0;
+			    text-indent: -9999px;
+			    top: 0;
+			    width: 65px;*/
+			}
+
+			#recover .flipLink{
+				right:auto;
+				left:0;
+			}
+
+		 </style>
+
+	</body>
+</html>

@@ -1,0 +1,78 @@
+<!-- Widget ID (each widget will need unique ID)-->
+<div class="jarviswidget jarviswidget-color-{{color}}" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false">
+	<!-- widget options:
+		usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+		
+		data-widget-colorbutton="false"	
+		data-widget-editbutton="false"
+		data-widget-togglebutton="false"
+		data-widget-deletebutton="false"
+		data-widget-fullscreenbutton="false"
+		data-widget-custombutton="false"
+		data-widget-collapsed="true" 
+		data-widget-sortable="false"
+		
+	-->
+	<header>
+		<span class="widget-icon"> <i class="{{classtype}}"></i> </span>
+		<h2 class="font-md"><strong>{{cntype}}</strong> </h2>				
+		
+	</header>
+
+	<!-- widget div-->
+	<div>
+		
+		<!-- widget edit box -->
+		<div class="jarviswidget-editbox">
+			<!-- This area used as dropdown edit box -->
+
+		</div>
+		<!-- end widget edit box -->
+		
+		<!-- widget content -->
+		<div class="widget-body">
+			
+			<div class="row">
+
+				<div class="col-sm-3 col-md-3 col-lg-3" data-ng-repeat="data in option" ng-init="number = 8">
+
+					<!-- well -->
+					<div class="well" style="min-height: 335px;">
+						<img ng-src="{{data.imgPath}}" 
+						     alt="My first photoshop layer mask on a high end PSD template theme" 
+						     title="{{data.cnName}}" 
+						     class="superbox-img" 
+						     href="javascript:void(0);"
+						     data-ng-click='next_ForumTopic(cntype, color, data.cnName)'>
+						<h3 class="txt-color-red"><strong>{{data.cnName}} </strong><br><!-- <code>
+							{{data.enName}}</code> --></h3>
+						<address data-ng-if="data.postTopic == ''">
+							無資料
+						</address>
+						<address data-ng-if="data.postTopic != ''">
+						  	<a href="javascript:void(0);"
+						  	   data-ng-click="enter_ForumPost_Widget({BgClass:''}, data)">
+						  		<strong data-ng-if="data.postTopic.length > number" class="text-primary">{{data.postTopic | limitTo : number}}...</strong>
+						  		<strong data-ng-if="data.postTopic.length <= number" class="text-primary">{{data.postTopic}}</strong>
+						  	</a><br>
+						  	<i class="glyphicon glyphicon-user"></i>&nbsp;{{data.postID}}<br>
+						  	<small class="txt-color-green">
+						  		<i class="glyphicon glyphicon-time"></i><i>&nbsp;{{data.postTime}}</i>
+						  	</small>
+						</address>
+
+					</div>
+					<!-- end well-->
+
+				</div>
+
+			</div>
+			
+		</div>
+		<!-- end widget content -->
+		
+	</div>
+	<!-- end widget div -->
+	
+</div>
+<!-- end widget -->
